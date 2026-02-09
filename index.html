@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Authoring Logs Parser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI Authoring Logs Parser</h1>
+            <p>Parse and visualize AI_AUTHORING log entries</p>
+        </header>
+
+        <div class="input-section">
+            <textarea id="logInput" placeholder="Paste your raw logs here..."></textarea>
+            <button id="parseBtn" onclick="parseLogs()">Parse Logs</button>
+        </div>
+
+        <div id="results" class="results-section"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

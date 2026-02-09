@@ -1,0 +1,8 @@
+{
+  "name": "raw_logs_parser",
+  "version": "1.0.0",
+  "description": "AI Authoring Logs Parser - Parse and visualize AI_AUTHORING logs",
+  "keywords": ["logs", "parser", "ai-authoring"],
+  "author": "",
+  "license": "ISC"
+}
