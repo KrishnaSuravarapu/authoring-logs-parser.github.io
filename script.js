@@ -8,25 +8,40 @@ function parseLogs() {
     }
 
     const lines = logInput.split('\n');
-    const aiAuthoringLogs = [];
 
-    lines.forEach(line => {
+    // Collect AI_AUTHORING logs and associate the RESPONSE that comes immediately after each
+    const aiAuthoringLogs = [];
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
         if (line.includes('AI_AUTHORING')) {
             const parts = line.split('AI_AUTHORING');
             if (parts.length === 2) {
                 const timestamp = parts[0].trim();
                 try {
                     const data = JSON.parse(parts[1].trim());
+                    let response = null;
+                    // Look ahead for RESPONSE line
+                    if (i + 1 < lines.length && lines[i + 1].includes('RESPONSE')) {
+                        const respParts = lines[i + 1].split('RESPONSE');
+                        if (respParts.length === 2) {
+                            try {
+                                response = JSON.parse(respParts[1].trim());
+                            } catch (e) {
+                                response = respParts[1].trim();
+                            }
+                        }
+                    }
                     aiAuthoringLogs.push({
                         timestamp,
-                        data
+                        data,
+                        response
                     });
                 } catch (e) {
                     console.error('Failed to parse JSON:', e);
                 }
             }
         }
-    });
+    }
 
     if (aiAuthoringLogs.length === 0) {
         resultsDiv.innerHTML = '<div class="no-results">No AI_AUTHORING logs found</div>';
@@ -37,7 +52,7 @@ function parseLogs() {
 }
 
 function renderLogEntry(log, index) {
-    const { timestamp, data } = log;
+    const { timestamp, data, response } = log;
     const metadata = data.metadata || {};
     const subObjectives = metadata.sub_objectives || [];
     
@@ -60,6 +75,13 @@ function renderLogEntry(log, index) {
             <div class="sub-objectives">
                 ${subObjectives.map((sub, subIndex) => renderSubObjective(sub, subIndex)).join('')}
             </div>
+
+            ${response !== undefined && response !== null ? `
+                <div class="response-block">
+                    <div class="response-title">RESPONSE</div>
+                    <pre class="response-json">${typeof response === 'object' ? JSON.stringify(response, null, 2) : response}</pre>
+                </div>
+            ` : ''}
         </div>
     `;
 }
