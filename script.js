@@ -119,11 +119,14 @@ function renderSubObjective(sub, index) {
 
             ${images.length > 0 ? `
                 <div class="images-grid">
-                    ${images.map(img => `
-                        <div class="image-container" onclick="openModal('${img}')">
-                            <img src="${img}" alt="Screenshot" loading="lazy" />
-                        </div>
-                    `).join('')}
+                    ${images.map(img => {
+                        const src = typeof img === 'string' ? img : (img && img.url) || '';
+                        return src ? `
+                            <div class="image-container" onclick="openModal('${src}')">
+                                <img src="${src}" alt="Screenshot" loading="lazy" />
+                            </div>
+                        ` : '';
+                    }).join('')}
                 </div>
             ` : ''}
         </div>
